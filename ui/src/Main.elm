@@ -57,8 +57,10 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ h1 [] [ text "Librarian" ]
+    div [ style "margin-top" "0px"
+        , style "background-color" "#fefefe"
+        ]
+        [ renderHeader        
         , h1 [] [ text "Sam was here!" ]
         , renderDocs model.viewEntries
         ]
@@ -90,6 +92,24 @@ renderDoc doc =
           , text doc.uid
           ]
 
+renderHeader : Html msg  
+renderHeader = 
+    div [ style "width" "100vw"
+        , style "display" "block"
+        , style "background-color" "black"
+        , style "height" "48px"
+        --, style "position" "absolute" 
+        , style "margin-top" "0px"
+        , style "color" "#fff"
+    ] [ headerTitle ]
+headerTitle : Html msg 
+headerTitle = 
+    h1  [ style "margin-top" "0px"
+        , style "float" "left"
+        , style "margin" "6px 2em" 
+        ] [ text "Librarian" ]
+
+        
 ---- PROGRAM ----
 
 
