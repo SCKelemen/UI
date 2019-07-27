@@ -73,15 +73,22 @@ renderDocs lst =
         , style "background" "#f9f9f9"
         , style "grid-template-columns" "repeat( auto-fill, minmax(320px, 1fr) )"
         ] 
-        (List.map (\l -> div [ style "display" "block"
-                             , style "width" "320px"
-                             , style "height" "260px"
-                             , style "background-color" "red"
-                             ] [ text l.title ]) lst )
+        (List.map renderDoc lst )
 
 documentStyles : List (String, String) 
 documentStyles = 
     [ ("display", "block"), ("width", "320px"), ("height", "260px"), ("background-color", "red")]        
+
+
+renderDoc : Document -> Html msg 
+renderDoc doc = 
+    div [ style "display" "block"
+        , style "width" "320px"
+        , style "height" "260px"
+        , style "background-color" "red"
+        ] [ text doc.title 
+          , text doc.uid
+          ]
 
 ---- PROGRAM ----
 
