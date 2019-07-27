@@ -10,7 +10,9 @@ import Html.Attributes exposing (src, style)
 
 type alias Model =
     { entries : List Document
-    ,  viewEntries : List Document           
+    , viewEntries : List Document
+    , query : Maybe String
+    , filter : Maybe String
     }
 
 type alias Document =
@@ -31,7 +33,11 @@ item2 =
     }    
 
 emptyModel : Model 
-emptyModel = { entries = [], viewEntries = [item1, item2, item1, item2, item1, item2, item1, item2 ] }
+emptyModel = { entries = [item1, item2, item1, item2, item1, item2, item1, item2]
+             , viewEntries = [item1, item2, item1, item2, item1, item2, item1, item2 ] 
+             , query = Nothing
+             , filter = Nothing
+             }
 
 init : ( Model, Cmd Msg )
 init =
