@@ -1,80 +1,92 @@
 import Browser
+import Browser.Navigation as Nav
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onInput)
+import Url
+
 
 -- MAIN
 
+main : Program () Model Msg
 main =
-  Browser.sandbox { init = init, update = update, view = view }
+  Browser.application
+    { init = init
+    , view = view
+    , update = update
+    , subscriptions = subscriptions
+    , onUrlChange = UrlChanged
+    , onUrlRequest = LinkClicked
+    }
 
 
 -- MODEL
 
 type alias Model =
-  { name : String
-  , title : String
-  , url : String
-  , solution : String
-  , feature : String
+  { key : Nav.Key
+  , url : Url.Url
   }
 
-init : Model
-init =
-  Model "" "" "" "" ""
+
+init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+init flags url key =
+  ( Model key url, Cmd.none )
 
 
 -- UPDATE
 
 type Msg
-  = Name String
-  | Title String
-  | Resource String
-  | Solution String
-  | Feature String
+  = LinkClicked Browser.UrlRequest
+  | UrlChanged Url.Url
 
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
   case msg of
-    Name name ->
-      { model | name = name }
+    LinkClicked urlRequest ->
+      case urlRequest of
+        Browser.Internal url ->
+          ( model, Nav.pushUrl model.key (Url.toString url) )
 
-    Title title ->
-      { model | title = title }
+        Browser.External href ->
+          ( model, Nav.load href )
 
-    Resource url ->
-      { model | url = url }
+    UrlChanged url ->
+      ( { model | url = url }
+      , Cmd.none
+      )
 
-    Solution solution -> 
-      { model | solution = solution }
 
-    Feature feature -> 
-      { model | feature = feature }
+-- SUBSCRIPTIONS
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+  Sub.none
 
 
 -- VIEW
 
-view : Model -> Html Msg
+view : Model -> Browser.Document Msg
 view model =
-  div []
-    [ viewInput "text" "Name" model.name Name
-    , viewInput "text" "Title" model.title Title
-    , viewInput "text" "Url" model.url Resource
-    , viewInput "text" "Solution" model.solution Solution
-    , viewInput "text" "Feature" model.feature Feature
-    , viewValidation model
-    ]
+  { title = "URL Interceptor"
+  , body =
+      [ text "The current URL is: "
+      , b [] [ text (Url.toString model.url) ]
+      , ul []
+          [ viewLink "/home"
+          , viewLink "/profile"
+          , viewLink "/reviews/the-century-of-the-self"
+          , viewLink "/reviews/public-opinion"
+          , viewLink "/reviews/shah-of-shahs"
+          ]
+      ]
+  }
 
 
-viewInput : String -> String -> String -> (String -> msg) -> Html msg
-viewInput t p v toMsg =
-  input [ type_ t, placeholder p, value v, onInput toMsg ] []
+viewLink : String -> Html msg
+viewLink path =
+  li [] [ a [ href path ] [ text path ] ]
 
 
-viewValidation : Model -> Html msg
-viewValidation model =
-  if model.title /= "" && model.name /= "" && model.url /= "" then
-    div [ style "color" "green" ] [ text "OK" ]
-  else
-    div [ style "color" "red" ] [ text "Title, Name, and Url are required." ]
+type Route 
+    = Document (Maybe String) 
+
