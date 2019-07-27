@@ -61,15 +61,7 @@ view model =
         , style "background-color" "#fefefe"
         ]
         [ renderHeader
-        , div [ style "display" "block"
-              , style "width" "100vw"
-              , style "background-color" "green" 
-              ] [ h1 
-                    [ style "float" "left"
-                    , style "margin" "6px 2em"
-                    , style "display" "block"
-                    ] [ text "documents"]
-                ]
+        , renderLabel        
         , renderDocs model.viewEntries
         ]
 
@@ -110,6 +102,7 @@ renderHeader =
         , style "margin-top" "0px"
         , style "color" "#fff"
     ] [ headerTitle ]
+
 headerTitle : Html msg 
 headerTitle = 
     h1  [ style "margin-top" "0px"
@@ -117,6 +110,11 @@ headerTitle =
         , style "margin" "6px 2em" 
         ] [ text "Librarian" ]
 
+renderLabel : Html msg 
+renderLabel =
+    h1  [  style "text-align" "left"
+        ,  style  "margin-left" "2em"
+    ] [ text "Documents"]
 
 ---- PROGRAM ----
 
