@@ -60,8 +60,16 @@ view model =
     div [ style "margin-top" "0px"
         , style "background-color" "#fefefe"
         ]
-        [ renderHeader        
-        , h1 [] [ text "Sam was here!" ]
+        [ renderHeader
+        , div [ style "display" "block"
+              , style "width" "100vw"
+              , style "background-color" "green" 
+              ] [ h1 
+                    [ style "float" "left"
+                    , style "margin" "6px 2em"
+                    , style "display" "block"
+                    ] [ text "documents"]
+                ]
         , renderDocs model.viewEntries
         ]
 
@@ -109,7 +117,7 @@ headerTitle =
         , style "margin" "6px 2em" 
         ] [ text "Librarian" ]
 
-        
+
 ---- PROGRAM ----
 
 
