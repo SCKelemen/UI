@@ -50,12 +50,26 @@ init =
 
 type Msg
     = NoOp
+    | UpdateQuery String 
+    | UpdateFilter String 
+    | Search 
+
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( model, Cmd.none )
+    case msg of 
+        UpdateQuery value ->
+            ( { model | query = Just value }, Cmd.none )
+        
+        UpdateFilter value -> 
+            ({ model | filter = Just value}, Cmd.none )
 
+        Search -> 
+            (model, Cmd.none)
+
+        NoOp ->
+            (model, Cmd.none)
 
 
 ---- VIEW ----
