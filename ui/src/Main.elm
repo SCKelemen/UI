@@ -2,7 +2,7 @@ module Main exposing (..)
 
 import Browser
 import Html exposing (Html, text, div, h1, img, ul, li)
-import Html.Attributes exposing (src)
+import Html.Attributes exposing (src, style)
 
 
 ---- MODEL ----
@@ -31,7 +31,7 @@ item2 =
     }    
 
 emptyModel : Model 
-emptyModel = { entries = [], viewEntries = [item1, item2 ] }
+emptyModel = { entries = [], viewEntries = [item1, item2, item1, item2, item1, item2, item1, item2 ] }
 
 init : ( Model, Cmd Msg )
 init =
@@ -66,8 +66,22 @@ view model =
 
 renderDocs : List Document -> Html msg 
 renderDocs lst =
-    div [] 
-        (List.map (\l -> div [] [ text l.title ]) lst )
+    div [ style "display" "grid"
+        , style "grid-gap" "16px 0px"
+        , style "margin"  "0px 5vw"
+        , style "max-width" "90vw"
+        , style "background" "#f9f9f9"
+        , style "grid-template-columns" "repeat( auto-fill, minmax(320px, 1fr) )"
+        ] 
+        (List.map (\l -> div [ style "display" "block"
+                             , style "width" "320px"
+                             , style "height" "260px"
+                             , style "background-color" "red"
+                             ] [ text l.title ]) lst )
+
+documentStyles : List (String, String) 
+documentStyles = 
+    [ ("display", "block"), ("width", "320px"), ("height", "260px"), ("background-color", "red")]        
 
 ---- PROGRAM ----
 
